@@ -88,3 +88,19 @@ subcategory: "Invalid Category"
  |
     When I run `tfplugindocs validate --allowed-resource-subcategories="Valid Category"`
     Then the validation should fail with the error "YAML frontmatter contains a subcategory (Invalid Category) that is not in the allowed list"
+
+  Scenario: Invalid frontmatter - guide subcategory not in allowed list
+    Given a Terraform provider with a guide with an invalid subcategory:
+      | File                | Content |
+      | docs/guides/test.md | ---
+subcategory: "Invalid Category"
+---
+# Invalid Subcategory
+ |
+    When I run `tfplugindocs validate --allowed-guide-subcategories="Valid Category"`
+    Then the validation should fail with the error "YAML frontmatter contains a subcategory (Invalid Category) that is not in the allowed list"
+
+  Scenario: File size too large
+    Given a Terraform provider with a documentation file that is too large
+    When I run `tfplugindocs validate`
+    Then the validation should fail with the error "file size exceeds the maximum allowed size"
